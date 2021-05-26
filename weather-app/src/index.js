@@ -4,10 +4,12 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import rootReducer from './reducers'
+import reducer from './reducers/weatherReducer'
 import App from './App';
 
-const store = createStore(rootReducer);
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const store = createStore(reducer);
 
 ReactDOM.render(
   <Provider store={store}>

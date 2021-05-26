@@ -1,5 +1,6 @@
 const initialState = {
-
+    zipCode: '',
+    appTitle: 'Get Current Weather'
 }
 
 const weatherReducer = (state = initialState, action) => {

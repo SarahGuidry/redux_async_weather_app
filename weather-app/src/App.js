@@ -11,6 +11,11 @@ import FiveDayForecast from './components/FiveDayForecast'
 const App = props => {
   return (
     <div>
+      <nav className='navbar navbar-dark bg-dark'>
+        <span className='navbar-brand'><img width='120px' alt='Open Weather Logo' src='./OpenWeather-Logo.jpg' />Brought to you by OpenWeatherAPI</span></nav>
+      <div className='container'>
+        <Header />
+      </div>
       <SearchForm />
     </div>
   )
