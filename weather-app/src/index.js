@@ -4,18 +4,19 @@ import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 
-import reducer from './reducers/weatherReducer'
+import rootReducer from './reducers/index.js'
 import App from './App';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-const store = createStore(reducer);
+const store = createStore(rootReducer);
 
 ReactDOM.render(
+  <React.StrictMode>
   <Provider store={store}>
     <Router>
       <App />
     </Router>
-  </Provider>,
+  </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 );

@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+//import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 
 const Header = props => {
     const appTitle = props.appTitle;
 
     return (
         <div>
-            <div className='row'>
-                <div className='col-sm-6'>
+            <Row className='row'>
+                <Col>
                     <h2>{appTitle}</h2>
-                </div>
-            </div></div>
+                </Col>
+            </Row>
+
+        </div>
     )
 }
 
