@@ -4,6 +4,8 @@ export const START_SEARCH = 'START_SEARCH'
 export const ERROR_GENERATED = 'ERROR_GENERATED'
 export const FETCHING_DATA = 'FETCHING_DATA'
 export const SHOW_RESULTS = 'SHOW_RESULTS'
+export const UPDATE_TITLE = 'UPDATE_TITLE'
+export const SET_WEATHER_CONDITIONS = 'SET_WEATHER_CONDITIONS'
 
 /*export function startSearch(searchQuery) {
     return async dispatch => {
@@ -36,49 +38,96 @@ export const SHOW_RESULTS = 'SHOW_RESULTS'
     }
 }*/
 
-export const startSearch = searchQuery => {
-    return dispatch => {
-        dispatch({ type: FETCHING_DATA, fetching: true })
-        getSomeAsyncData(dispatch, searchQuery)
-    }
+
+export const startSearch = (searchQuery) => {
+     console.log('start_search action creator dispatched '+searchQuery)
+     getSomeAsyncData(searchQuery)
+     return dispatch =>(
+          dispatch({ type: START_SEARCH, searchQuery: searchQuery })
+     ) 
 }
 
-export const showResults = currentConditions => {
-    return dispatch => {
-        dispatch({
-            type: SHOW_RESULTS,
-            location:currentConditions.location,
-            currentConditions:currentConditions.currentWeather
-        })
-    }
+export const showResults = currentWeather => {
+     return dispatch => {
+          dispatch({
+               type: SHOW_RESULTS,
+               weatherLocation: currentWeather.weatherLocation,
+               currentWeather: currentWeather.currentWeather
+          })
+     }
 }
 
 const getSomeAsyncData = async (dispatch, searchQuery) => {
-    const options = {
-        params: {
-            q: { searchQuery }
-        },
-        headers: {
-            'X-RapidAPI-Key': 'b0aa06f1c1msh784ba5a3d741d16p108396jsn82164ffef512',
-            'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-        }
-    }
-    try {
-        await axios.get('https://weatherapi-com.p.rapidapi.com/current.json', options)
-            .then(res => {
-                return res.json();
-            }).then(data => {
-                dispatch(showResults(data))
-            })
-    } catch (err) {
-        dispatch({ type: errorGenerated, payload: err.message })
-    }
-    dispatch({
-        type: FETCHING_DATA,
-        fetching: false
-    })
+     console.log('getAsyncData started')
+     const options = {
+          params: {
+               q: { searchQuery }
+          },
+          headers: {
+               'X-RapidAPI-Key': 'b0aa06f1c1msh784ba5a3d741d16p108396jsn82164ffef512',
+               'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
+          }
+     }
+     try {
+          await axios.get('https://weatherapi-com.p.rapidapi.com/current.json', options)
+               .then(res => {
+
+                    console.log('results of async call: ' + res.data.current.temp_f)
+                    return dispatch =>
+
+                         dispatch({
+                              type: SET_WEATHER_CONDITIONS,
+                              payload: res
+                         })
+               }).catch(err => {
+                    return dispatch=>
+                    dispatch({ type: errorGenerated, payload: err.message })
+               })
+
+          dispatch({
+               type: FETCHING_DATA,
+               fetching: false
+          })
+     } catch (err) {
+          return dispatch =>
+          dispatch({ type: errorGenerated, payload: err })
+     }
+}
+export const errorGenerated = error => {
+     return (error.message)
+
 }
 
-export const errorGenerated = error => {
-    return (error.message)
+export const setWeatherConditions = (resp) => {
+     return dispatch =>
+          dispatch({
+               type: SET_WEATHER_CONDITIONS, payload: {
+                    currentWeather: {
+                         temp_f: resp.data.current.temp_f,
+                         wind_dir: resp.data.current.wind_dir,
+                         wind_mph: resp.data.current.wind_mph,
+                         cloud: resp.data.current.cloud,
+                         condition: {
+                              code: resp.data.current.condition.code,
+                              icon: resp.data.current.condition.icon,
+                              text: resp.data.current.condition.text,
+                         },
+                         humidity: resp.data.current.humidity,
+                         feelslike_f: resp.data.current.feelslike_f,
+                         is_day: resp.data.current.is_day,
+                         last_updated: resp.data.current.last_updated,
+                    },
+                    weatherLocation: {
+                         locName: resp.data.location.name,
+                         region: resp.data.location.region,
+                         country: resp.data.location.country,
+                         lat: resp.data.location.lat,
+                         lon: resp.data.location.lon,
+                         tz_id: resp.data.location.tz_id,
+                         localtime_epoch: resp.data.location.localtime_epoch,
+                         localtime: resp.data.location.localtime
+                    }
+               }
+
+          })
 }

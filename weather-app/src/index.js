@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import rootReducer from './reducers/index.js'
 import App from './App';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(rootReducer);
 

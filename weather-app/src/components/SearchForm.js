@@ -1,103 +1,98 @@
-import React, { useState} from 'react'
-import {useHistory} from 'react-router-dom'
-import {connect} from 'react-redux'
-
-import Form from 'react-bootstrap/Form'
+import React, { useState } from 'react'
+import { connect, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import Button from 'react-bootstrap/Button'
-import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import FormControl from 'react-bootstrap/FormControl'
-import InputGroup from 'react-bootstrap/InputGroup'
+import Form from 'react-bootstrap/Form'
 
-
-import { startSearch, errorGenerated } from '../actions/currentWeatherActions'
+import { errorGenerated, startSearch } from '../actions/currentWeatherActions'
 
 
 const SearchForm = props => {
-    const [searchQuery, setSearchQuery] = useState('')
-    const{ push} = useHistory()
+     const [searchQuery, setSearchQuery] = useState('')
+     const [unitOfMeasurement, setUnitOfMeasurement] = useState('imperial')
+     const { push } = useHistory()
+     const dispatch = useDispatch()
+     const handleChange = e => {
+          e.preventDefault()
+          console.log(e.target.value + ' typed into search box')
+          setSearchQuery(e.target.value)
+          // console.log('searchQuery set: ' + searchQuery)
+     }
+     const handleSelect = e =>{
+          e.preventDefault()
+          setUnitOfMeasurement(e)
+     }
 
-    const handleChange = e => {
-        e.preventDefault()
-        console.log(e.target.value + ' typed into search box')
-        setSearchQuery(e.target.value)
-       // console.log('searchQuery set: ' + searchQuery)
-    }
+     const handleSearch = (e) => {
+          console.log('submit button clicked')
+          e.preventDefault();
 
-    const handleSearch = (e) => {
-        console.log('submit button clicked')
-        e.preventDefault();
-       startSearch(searchQuery)
-        
-        console.log(props)
-        console.log(searchQuery)
-       /* setLocation({
-            locName:results.location.name,
-            region:results.location.region,
-            country:results.location.country,
-            lat: results.location.lat,
-            lon: results.location.long,
-            tz_id:results.location.tz_id,
-            localtime_epoch: results.location.localtime_epoch,
-            localtime:results.location.localtime
-        })*/
-        
-        console.log(props)
-        push('/current')
-    }
+          startSearch(searchQuery, dispatch)
+          console.log(unitOfMeasurement)
+          //console.log(props)
+          console.log(searchQuery)
+          /* setLocation({
+               locName:results.location.name,
+               region:results.location.region,
+               country:results.location.country,
+               lat: results.location.lat,
+               lon: results.location.long,
+               tz_id:results.location.tz_id,
+               localtime_epoch: results.location.localtime_epoch,
+               localtime:results.location.localtime
+           })*/
 
-    return (
-        <div>
-            <div className='form-wrapper container'>
-                <Row className='justify-content-md-center' xs="2" md='4' lg='6'>
-                    <Col>
-                        <Form onSubmit={handleSearch}>
-                            <Form.Group controlId='searchForm'>
-                                <Form.Control type='text'
-                                    placeholder='Search for Location'
-                                    aria-label='search for location'
-                                    aria-describedby='basic add-on'
-                                    onChange={handleChange} />
-                                  
+          console.log(props)
+          push('/current')
+     }
 
-                                <Col>
-                                
-                                <Form.Control as='select'
-                                 defaultValue='Unit of Measure'>
-                                    <option value='imperial'>Imperial</option>
-                                    <option value='metric'>Metric</option>
-                                </Form.Control>
-                                </Col>
-                                <Col>
-                                    <Button type='submit'>Get Weather</Button>
-                                </Col>
-                                </Form.Group>
-                        </Form>
-                    </Col>
-                </Row>
-            </div >
-
-        </div >
+     return (
+          <div>
+               <div className='form-wrapper container'>
+                    <h4>Search for Location</h4>
+                    <Form onSubmit={handleSearch}>
+                         <Form.Group controlId='searchForm'>
+                              <Form.Control type='text'
+                                   placeholder='Search for Location'
+                                   aria-label='search for location'
+                                   aria-describedby='basic add-on'
+                                   onChange={handleChange} />
+                              <Form.Control 
+                                   as='select'
+                                   defaultValue='Unit of Measure'
+                                   onChange={handleSelect}>
+                                        <option value='imperial'>Imperial</option>
+                                        <option value='metric'>Metric</option>
+                              </Form.Control>
+                              <Button type='submit'>
+                                   Get Weather
+                              </Button>
+                         </Form.Group>
+                    </Form>
+               </div>
+          </div>
     )
 }
-const mapStateToProps =(state)=>{
-    return{
-        searchQuery: state.currentWeather.searchQuery,
-        location:state.currentWeather.location,
-        searchResults:state.currentWeather.searchResults,
-        currentWeather:state.currentWeather.currentWeather,
-        fetching:state.currentWeather.fetching,
-        err:state.currentWeather.err
-    }
-}
+
+
+const mapStateToProps = (state) => {
+     return {
+          searchQuery: state.currentWeather.searchQuery,
+          weatherLocation: state.currentWeather.weatherLocation,
+          searchResults: state.currentWeather.searchResults,
+          currentWeather: state.currentWeather.currentWeather,
+          fetching: state.currentWeather.fetching,
+          err: state.currentWeather.err
+     }
+};
 
 const mapDispatchToProps = (dispatch) => {
-   return {
-        startSearch: (searchQuery) => {
-            dispatch(startSearch(searchQuery))
-        },
-        errorGenerated:()=>dispatch(errorGenerated)
-        }
-    }
+     return {
+          startSearch: (searchQuery) => {
+               dispatch(startSearch(searchQuery))
+          },
+          errorGenerated: () => dispatch(errorGenerated)
+     }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchForm);
