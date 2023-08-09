@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 
 import { errorGenerated, startSearch } from '../actions/currentWeatherActions'
-
 
 const SearchForm = props => {
      const [searchQuery, setSearchQuery] = useState('')
@@ -17,9 +14,8 @@ const SearchForm = props => {
           e.preventDefault()
           console.log(e.target.value + ' typed into search box')
           setSearchQuery(e.target.value)
-          // console.log('searchQuery set: ' + searchQuery)
      }
-     const handleSelect = e =>{
+     const handleSelect = e => {
           e.preventDefault()
           setUnitOfMeasurement(e)
      }
@@ -51,30 +47,37 @@ const SearchForm = props => {
           <div>
                <div className='form-wrapper container'>
                     <h4>Search for Location</h4>
-                    <Form onSubmit={handleSearch}>
-                         <Form.Group controlId='searchForm'>
-                              <Form.Control type='text'
-                                   placeholder='Search for Location'
-                                   aria-label='search for location'
-                                   aria-describedby='basic add-on'
-                                   onChange={handleChange} />
-                              <Form.Control 
-                                   as='select'
-                                   defaultValue='Unit of Measure'
-                                   onChange={handleSelect}>
+                    <form onSubmit={handleSearch}>
+                         <div controlId='searchForm'>
+                              <div>
+                                   <input type='text'
+                                        className='form-control'
+                                        placeholder='Search for Location'
+                                        aria-label='search for location'
+                                        aria-describedby='basic add-on'
+                                        onChange={handleChange} />
+                              </div>
+                              <div className='input-field'>
+                                   <select onChange={handleSelect}>
+                                        <option
+                                             value=''
+                                             disabled
+                                             selected>
+                                             Unit of Measure
+                                        </option>
                                         <option value='imperial'>Imperial</option>
                                         <option value='metric'>Metric</option>
-                              </Form.Control>
-                              <Button type='submit'>
+                                   </select>
+                              </div>
+                              <button className='modal-close' type='submit'>
                                    Get Weather
-                              </Button>
-                         </Form.Group>
-                    </Form>
+                              </button>
+                         </div>
+                    </form>
                </div>
-          </div>
-    )
+          </div >
+     )
 }
-
 
 const mapStateToProps = (state) => {
      return {
