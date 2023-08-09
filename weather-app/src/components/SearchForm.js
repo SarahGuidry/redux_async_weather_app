@@ -12,6 +12,7 @@ const SearchForm = props => {
      const [unitOfMeasurement, setUnitOfMeasurement] = useState('imperial')
      const { push } = useHistory()
      const dispatch = useDispatch()
+
      const handleChange = e => {
           e.preventDefault()
           console.log(e.target.value + ' typed into search box')
@@ -27,7 +28,7 @@ const SearchForm = props => {
           console.log('submit button clicked')
           e.preventDefault();
 
-          startSearch(searchQuery, dispatch)
+          startSearch(searchQuery, unitOfMeasurement, dispatch)
           console.log(unitOfMeasurement)
           //console.log(props)
           console.log(searchQuery)
@@ -82,14 +83,15 @@ const mapStateToProps = (state) => {
           searchResults: state.currentWeather.searchResults,
           currentWeather: state.currentWeather.currentWeather,
           fetching: state.currentWeather.fetching,
-          err: state.currentWeather.err
+          err: state.currentWeather.err,
+          unitOfMeasurement: state.currentWeather.unitOfMeasurement
      }
 };
 
 const mapDispatchToProps = (dispatch) => {
      return {
-          startSearch: (searchQuery) => {
-               dispatch(startSearch(searchQuery))
+          startSearch: (searchQuery, unitOfMeasurement) => {
+               dispatch(startSearch(searchQuery, unitOfMeasurement, dispatch))
           },
           errorGenerated: () => dispatch(errorGenerated)
      }

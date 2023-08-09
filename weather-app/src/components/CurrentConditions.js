@@ -1,44 +1,48 @@
-import React, { useState } from 'react'
+import React, { /*useState*/ } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import axios from 'axios'
 //import axios from 'axios'
-//import Button from 'react-bootstrap/Button'
-import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
+
 //import FiveDayForecast from './FiveDayForecast'
 
 const CurrentConditions = props => {
-     const [weatherIcon, setWeatherIcon] = useState('')
-     const code = props.currentWeather.condition.code;
+     //const [weatherIcon, setWeatherIcon] = useState('')
+   //  const code = props.currentWeather.condition.code;
    
-     async function getIcon() {
-               await axios.get('weatherapi.com/docs/werather_conditions.json')
-     }
-      
-
+  /*   async function getIcon(code) {
+               await axios.get(`weatherapi.com/docs/weather_conditions.json`)
+               .then(resp =>{
+                    console.log(resp.data)
+                    if(code === resp.data.code){
+                         const iconId = resp.data.icon
+                    setWeatherIcon(iconId)
+     }})
+     }*/
+    // console.log(weatherIcon)
+  //   getIcon(code);
 
      return (
           <div>
-               <Col md={6}></Col>
-               <Col md={6}>
-                    <Card style={{ width: '18rem' }}>
-                         <Card.Body>
-                              <Card.Title>Current Conditions</Card.Title>
-                              <Card.Subtitle>{props.weatherLocation.locName} As of {new Date(props.weatherLocation.localtime).toLocaleTimeString()}</Card.Subtitle>
-                              <Card.Subtitle>Current Temperature: {props.currentWeather.temp_f}</Card.Subtitle>
-                              <Card.Subtitle>Feels Like: {props.currentWeather.feelslike_f}</Card.Subtitle>
-                              <Card.Subtitle>{props.currentWeather.condition.text}</Card.Subtitle>
-                              <Card.Text>Humidity: {props.currentWeather.humidity}%</Card.Text>
-                              <Card.Text>Wind Direction: {props.currentWeather.wind_dir} {props.currentWeather.wind_mph} mph</Card.Text>
-                         </Card.Body>
-                         <Card.Footer>
+               <div className='col '></div>
+               <div className='md6'>
+              
+                    <div className='card' style={{ width: '18rem' }}>
+                         <div>
+                              <div>Current Conditions</div>
+                              <div>{props.weatherLocation.locName} As of {new Date(props.weatherLocation.localtime).toLocaleTimeString()}</div>
+                              <div>Current Temperature: {props.currentWeather.temp_f}</div>
+                              <div>Feels Like: {props.currentWeather.feelslike_f}</div>
+                              <div>{props.currentWeather.condition.text}</div>
+                              <div> {props.currentWeather.humidity}%</div>
+                              <div>Wind Direction: {props.currentWeather.wind_dir} {props.currentWeather.wind_mph} mph</div>
+                         </div>
+                         <div className='footer'>
                               <Link to='/5dayForecast'>
                                    5 Day Forecast
                               </Link>
-                         </Card.Footer>
-                    </Card>
-               </Col>
+                         </div>
+                    </div>
+               </div>
           </div>
      )
 }
