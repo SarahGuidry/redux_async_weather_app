@@ -39,11 +39,11 @@ export const SET_WEATHER_CONDITIONS = 'SET_WEATHER_CONDITIONS'
 }*/
 
 
-export const startSearch = (searchQuery) => {
+export const startSearch = (searchQuery, unitOfMeasurement) => {
      console.log('start_search action creator dispatched '+searchQuery)
-     getSomeAsyncData(searchQuery)
+     getSomeAsyncData(searchQuery, unitOfMeasurement)
      return dispatch =>(
-          dispatch({ type: START_SEARCH, searchQuery: searchQuery })
+          dispatch({ type: START_SEARCH, searchQuery: searchQuery, unitOfMeasurement:unitOfMeasurement })
      ) 
 }
 
@@ -104,8 +104,14 @@ export const setWeatherConditions = (resp) => {
                type: SET_WEATHER_CONDITIONS, payload: {
                     currentWeather: {
                          temp_f: resp.data.current.temp_f,
+                         temp_c: resp.data.current.temp_c,
                          wind_dir: resp.data.current.wind_dir,
+                         wind_degree: resp.data.current.wind_degree,
                          wind_mph: resp.data.current.wind_mph,
+                         wind_kph: resp.data.current.wind_kph,
+                         pressure_mb: resp.data.current.pressure_mb,
+                         precip_in: resp.data.current.precip_in,
+                         precip_mm: resp.data.current.precip_mm,
                          cloud: resp.data.current.cloud,
                          condition: {
                               code: resp.data.current.condition.code,
@@ -114,8 +120,14 @@ export const setWeatherConditions = (resp) => {
                          },
                          humidity: resp.data.current.humidity,
                          feelslike_f: resp.data.current.feelslike_f,
+                         feelslike_c:resp.data.current.feelslike_c,
                          is_day: resp.data.current.is_day,
                          last_updated: resp.data.current.last_updated,
+                         vis_km:resp.data.current.vis_km,
+                         vis_miles:resp.data.current.vis_miles,
+                         uv: resp.data.current.uv,
+                         gust_mph:resp.data.current.gust_mph,
+                         gust_km: resp.data.current.gust_km
                     },
                     weatherLocation: {
                          locName: resp.data.location.name,

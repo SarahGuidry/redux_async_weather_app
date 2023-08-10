@@ -1,21 +1,21 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import Card from 'react-bootstrap/Card'
-import CardGroup from 'react-bootstrap/CardGroup'
-import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Stack from 'react-bootstrap/Stack'
-import { connect, useDispatch } from 'react-redux'
+import 'materialize-css/dist/css/materialize.min.css'
+import { connect } from 'react-redux'
 import { Redirect, Route, Switch } from 'react-router-dom'
+import M from 'materialize-css/dist/js/materialize.min.js';
 
-//import { startSearch } from './actions/currentWeatherActions'
+
 import CurrentConditions from './components/CurrentConditions'
 import FiveDayForecast from './components/FiveDayForecast'
 import SearchForm from './components/SearchForm'
 
 
 const App = (props) => {
+     useEffect(() => {
+          M.AutoInit();
+     }, [])
+
      const [currentWeather, setCurrentWeather] = useState({
           temp_f: '0',
           wind_dir: '0',
@@ -41,7 +41,7 @@ const App = (props) => {
           localtime_epoch: '',
           localtime: ''
      })
-    
+
      const searchQuery = "70115"
      useEffect(() => {
           //console.log('dispatching start_search  from app component for landingPage current conditions')
@@ -65,8 +65,10 @@ const App = (props) => {
      const setStates = resp => {
           setCurrentWeather({
                temp_f: resp.data.current.temp_f,
+               temp_c: resp.data.current.temp_c,
                wind_dir: resp.data.current.wind_dir,
                wind_mph: resp.data.current.wind_mph,
+               wind_km: resp.data.current.wind_km,
                cloud: resp.data.current.cloud,
                condition: {
                     code: resp.data.current.condition.code,
@@ -75,8 +77,18 @@ const App = (props) => {
                },
                humidity: resp.data.current.humidity,
                feelslike_f: resp.data.current.feelslike_f,
+               feelslike_c: resp.data.current.feelslike_c,
                is_day: resp.data.current.is_day,
-               last_updated: resp.data.current.last_updated
+               last_updated: resp.data.current.last_updated,
+               wind_degree: resp.data.current.wind_degree,
+               pressure_mb: resp.data.current.pressure_mb,
+               precip_in: resp.data.current.precip_in,
+               precip_mm: resp.data.current.precip_mm,
+               vis_km: resp.data.current.vis_km,
+               vis_miles: resp.data.current.vis_miles,
+               uv: resp.data.current.uv,
+               gust_mph:resp.data.current.gust_mph,
+               gust_km: resp.data.current.gust_km
           })
           setWeatherLocation({
                locName: resp.data.location.name,
@@ -94,51 +106,53 @@ const App = (props) => {
      console.log(weatherLocation)
      console.log(currentWeather)
      return (
-          <div>
-               <Container fluid>
-                    <Row id='navbar' className='justify-content-md-center'>
-                         <Col>
-                              <nav className='navbar navbar-dark bg-dark'>
-                                   <span className='navbar-brand'>
-                                        {/*<a href="https://www.weatherapi.com/" title="Free Weather API">
+          <>
+               <div>
+                    <div className='Container fluid'>
+                         <div className='justify-content-md-center row' id='navbar'>
+                              <div className='col'>
+                                   <nav className='navbar navbar-dark bg-dark'>
+                                        <span className='navbar-brand'>
+                                             {/*<a href="https://www.weatherapi.com/" title="Free Weather API">
                                              <img src='//cdn.weatherapi.com/v4/images/weatherapi_logo.png' alt="Weather data by WeatherAPI.com" border="0" />
      </a>*/}
-                                   </span>
-                              </nav>
-                         </Col>
-                    </Row>
-                    <Row id='header searchform'>
-                         <Col id='spacer column'>
-                         </Col>
-                         <Col >
-                              <Stack >
-                                   <SearchForm />
-                              </Stack>
-                         </Col>
-                    </Row>
-                    <Row>
-                         <Col id='data column' xs={8}></Col>
-                         <Col xs={4}>
-                              <h1>{props.appTitle}</h1>
-                              <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation}/>
-                         </Col>
-                    </Row>
-                    <Row>
-                    </Row>
-               </Container>
+                                        </span>
+                                   </nav>
+                              </div>
+                         </div>
+                         <div className='row' id='header searchform'>
+                              <div className='col' id='spacer column'>
+                              </div>
+                              <div className='col' >
+                                   <div >
+                                        <SearchForm />
+                                   </div>
+                              </div>
+                         </div>
+                         <div>
+                              <div id='data column' xs={8}></div>
+                              <div xs={4}>
+                                   <h1>{props.appTitle}</h1>
+                                   <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
+                              </div>
+                         </div>
+                         <div>
+                         </div>
+                    </div>
 
-               <Switch>
-                    <Route path={'/current'}>
-                         <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
-                    </Route>
-                    <Route exact path={'/5dayforecast'}>
-                         <FiveDayForecast />
-                    </Route>
-                    <Route path="/">
-                         <Redirect to='/current' />
-                    </Route>
-               </Switch>
-          </div >
+                    <Switch>
+                         <Route path={'/current'}>
+                              <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
+                         </Route>
+                         <Route exact path={'/5dayforecast'}>
+                              <FiveDayForecast />
+                         </Route>
+                         <Route path="/">
+                              <Redirect to='/current' />
+                         </Route>
+                    </Switch>
+               </div >
+          </>
      )
 }
 
