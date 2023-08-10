@@ -8,7 +8,7 @@ import M from 'materialize-css/dist/js/materialize.min.js';
 
 import CurrentConditions from './components/CurrentConditions'
 import FiveDayForecast from './components/FiveDayForecast'
-import SearchForm from './components/SearchForm'
+import Header from './components/Header'
 
 
 const App = (props) => {
@@ -43,6 +43,7 @@ const App = (props) => {
      })
 
      const searchQuery = "70115"
+
      useEffect(() => {
           //console.log('dispatching start_search  from app component for landingPage current conditions')
           const options = {
@@ -87,7 +88,7 @@ const App = (props) => {
                vis_km: resp.data.current.vis_km,
                vis_miles: resp.data.current.vis_miles,
                uv: resp.data.current.uv,
-               gust_mph:resp.data.current.gust_mph,
+               gust_mph: resp.data.current.gust_mph,
                gust_km: resp.data.current.gust_km
           })
           setWeatherLocation({
@@ -106,53 +107,40 @@ const App = (props) => {
      console.log(weatherLocation)
      console.log(currentWeather)
      return (
-          <>
-               <div>
-                    <div className='Container fluid'>
-                         <div className='justify-content-md-center row' id='navbar'>
-                              <div className='col'>
-                                   <nav className='navbar navbar-dark bg-dark'>
-                                        <span className='navbar-brand'>
-                                             {/*<a href="https://www.weatherapi.com/" title="Free Weather API">
-                                             <img src='//cdn.weatherapi.com/v4/images/weatherapi_logo.png' alt="Weather data by WeatherAPI.com" border="0" />
-     </a>*/}
-                                        </span>
-                                   </nav>
-                              </div>
-                         </div>
-                         <div className='row' id='header searchform'>
-                              <div className='col' id='spacer column'>
-                              </div>
-                              <div className='col' >
-                                   <div >
-                                        <SearchForm />
-                                   </div>
-                              </div>
-                         </div>
-                         <div>
-                              <div id='data column' xs={8}></div>
-                              <div xs={4}>
-                                   <h1>{props.appTitle}</h1>
-                                   <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
-                              </div>
-                         </div>
-                         <div>
+          <React.Fragment>
+               <div className='Container fluid'>
+                    <div className='row'>
+                         <div className='col s12'>
+                              <Header />
                          </div>
                     </div>
-
-                    <Switch>
-                         <Route path={'/current'}>
+                    <div className='row' id='header searchform'>
+                         <div className='col' id='spacer column'>
+                         </div>
+                         <div id='data column' xs={8}></div>
+                         <div xs={4}>
+                              <h1>{props.appTitle}</h1>
                               <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
-                         </Route>
-                         <Route exact path={'/5dayforecast'}>
-                              <FiveDayForecast />
-                         </Route>
-                         <Route path="/">
-                              <Redirect to='/current' />
-                         </Route>
-                    </Switch>
-               </div >
-          </>
+                         </div>
+                    </div>
+                    <div>
+                    </div>
+               </div>
+
+               <Switch>
+                    <Route path={'/current'}>
+                         <CurrentConditions currentWeather={currentWeather} weatherLocation={weatherLocation} />
+                    </Route>
+                    <Route exact path={'/5dayforecast'}>
+                         <FiveDayForecast />
+                    </Route>
+                    <Route path="/">
+                         <Redirect to='/current' />
+                    </Route>
+               </Switch>
+
+          </React.Fragment>
+
      )
 }
 
